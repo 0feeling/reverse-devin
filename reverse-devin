@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeu Dichotomie</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center; /* Center text */
+        margin-top: 50px;  /* Add top margin */
+      }
+      #game {
+        margin: 20px;
+      }
+      input[type="number"] {
+        padding: 10px; /* Add padding */
+        font-size: 16px; /* Font size */
+        width: 100px; /* Input width */
+      }
+      button {
+        padding: 10px 20px; /* Button padding */
+        font-size: 16px; /* Button font size */
+        cursor: pointer; /* Pointer cursor */
+        margin: 5px; /* Space between buttons */
+      }
+      #attempts {
+        margin-top: 20px; /* Add space above attempts display */
+        font-weight: bold; /* Bold text */
+      }
+      #message {
+        margin-top: 10px; /* Space above the message */
+        color: #333; /* Text color */
+      }
+      #emoji {
+        font-size: 24px; /* Emoji size */
+        margin-top: 10px; /* Space above emoji */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <h1>Jeu Dichotomie</h1>
+      <p>Devinez un nombre entre 1 et 100 !</p>
+      <input type="number" id="guess" min="1" max="100" />
+      <button onclick="makeGuess()">Deviner</button>
+      <p id="message"></p>
+      <p id="emoji"></p> <!-- Emoji display -->
+    </div>
+
+    <div>
+      <button onClick="resetGame()">Obtenir un nouveau Nombre Mystère !</button>
+    </div>
+
+    <div id="attempts">
+      Essais : <span id="attemptCount">0</span>
+    </div>
+
+    <script>
+      let randomNumber; // Global variable for the random number
+      let attempts = 0; // Global variable for attempts
+
+      // Start the game when the page loads
+      function startGame() {
+        resetGame();
+      }
+
+      // Function to reset the game
+      function resetGame() {
+        attempts = 0;
+        randomNumber = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+        document.getElementById("message").innerText = "Le jeu a commencé, faites votre premier essai !";
+        document.getElementById("guess").value = "";
+        document.getElementById("attemptCount").innerText = attempts; // Reset attempt count display
+        document.getElementById("emoji").textContent = ""; // Clear emoji
+        console.log(randomNumber); // For debugging
+      }
+
+      // Function to make a guess
+      function makeGuess() {
+        const guess = Number(document.getElementById("guess").value);
+
+        // Check if the guess is valid
+        if (guess < 1 || guess > 100 || isNaN(guess)) {
+          document.getElementById("message").innerText = "Votre nombre n'est pas correct, veuillez recommencer !";
+          document.getElementById("emoji").textContent = ""; // Clear emoji
+          return;
+        }
+
+        attempts++; // Increment attempts count
+        document.getElementById("attemptCount").innerText = attempts; // Update attempt count display
+
+        // Check the guess against the random number
+        if (guess > randomNumber) {
+          document.getElementById("message").innerText = "Votre nombre est trop grand, veuillez recommencer !";
+          document.getElementById("emoji").textContent = "😅"; // Emoji for too high
+        } else if (guess < randomNumber) {
+          document.getElementById("message").innerText = "Votre nombre est trop petit, veuillez recommencer !";
+          document.getElementById("emoji").textContent = "😟"; // Emoji for too low
+        } else {
+          document.getElementById("message").innerText = "Bravo ! Vous avez trouvé le nombre mystère ! 🎉";
+          document.getElementById("emoji").textContent = "🥳"; // Emoji for correct guess
+        }
+
+        // Clear the input field after making a guess
+        document.getElementById("guess").value = "";
+      }
+
+      // Start the game when the page loads
+      window.onload = startGame;
+    </script>
+  </body>
+</html>
